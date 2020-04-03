@@ -1,13 +1,5 @@
 
 
-let elems = [];
-let currIndex = -1;
-
-
-elems.push({Term: 'A', Subjects: []});
-currIndex++;
-elems[currIndex].Subjects.push({Math: '5'});
-
+let elems = {};
 
 console.log(elems);
-console.log(elems[currIndex].Subjects[0]);

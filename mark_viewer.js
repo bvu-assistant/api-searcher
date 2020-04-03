@@ -44,7 +44,7 @@ async function getMarks(url)
                             else
                                 if (index === 1)
                                 {
-                                    tables.SummaryTable = getSummaryTable($(this));
+                                    tables.SummaryTable = getSummaryTable(elem);
                                 }
                         });
 

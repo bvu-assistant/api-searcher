@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 //  Mở cổng
 app.listen(process.env.PORT, () =>
 {
-    console.log(`Server listening on port: ${process.env.PORT}.\n`);
+    console.log(`Seacher server listening on port: ${process.env.PORT}.\n`);
 });
 
 
@@ -42,7 +42,7 @@ app.get('/', async (req, res) =>
     }
     else
     {
-        res.status(200).send("Server chạy ngon lành.");
+        res.status(200).send("Seacher server chạy ngon lành.");
     }
 });
 
@@ -53,12 +53,14 @@ async function getMarks(id)
     try
     {
         let student = await getStudent(id);
-        student = JSON.parse(student);
-        // console.log(student);
+        if (student && student.length)
+        {
+            student = JSON.parse(student);
+            const mask_viewer = require('./mark_viewer');
+            return await mask_viewer.getMarks(student.ViewMarks);
+        }
 
-
-        const mask_viewer = require('./mark_viewer');
-        return mask_viewer.getMarks(student.ViewMarks);
+        return {};
     }
     catch (err)
     {
@@ -84,7 +86,7 @@ async function getStudent(id)
                 },
                 (err, res, body) =>
                 {
-                    if (err)
+                    if (err || (res.statusCode !== 200))
                     {
                         reject(err);
                     }
