@@ -104,7 +104,6 @@ function getActualTable(table)
     }
 }
 
-
 function getSubjectInfo(tr)
 {
     try
@@ -175,6 +174,7 @@ function getSubjectInfo(tr)
         console.log(err);
     }
 }
+
 
 
 //  Return JSON
