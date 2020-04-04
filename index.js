@@ -44,6 +44,13 @@ app.get('/', async (req, res) =>
                     res.status(200).send(await getTestSchedule(id));
                     break;
                 }
+
+            case 'ViewLiabilities':
+                {
+                    res.status(200).send(await getLiability(id));
+                    break;
+                }
+
             default:
                     res.status(200).send('Wrong the method name param.');
         }
@@ -97,6 +104,28 @@ async function getTestSchedule(id)
         return err;
     }
 }
+
+async function getLiability(id)
+{
+    try
+    {
+        let student = await getStudent(id);
+        if (student && student.length > 2)
+        {
+            student = JSON.parse(student);
+            const liability_viewer = require('./liability-viewer');
+            return await liability_viewer.getLiability(student.ViewLiabilities);
+        }
+
+        return {};
+    }
+    catch (err)
+    {
+        console.log(err);
+        return err;
+    }
+}
+
 
 
 
