@@ -22,6 +22,11 @@ async function getTestSchedules(url)
             let $ = cheerio.load(body, {decodeEntities: false});
 
 
+            //  Lấy học kỳ đang chọn
+            let term = $('select[id="ctl00_ContentPlaceHolder_cboHocKy3"] option:selected').text();
+            console.log('Selected term: ', term);
+
+
             let schedule = [];
             let currIndex = -1;
             $('#detailTbl >tbody >tr:not(:first-child)').each((trIndex, tr) =>
@@ -84,9 +89,15 @@ async function getTestSchedules(url)
                 });
             });
 
+
             //  Xoá các kí tự Tabs và xuống dòng bị thừa
             let removed = JSON.stringify(schedule).replace(/(\\n[ \t]{2,})/gm, '');
-            resolve(JSON.parse(removed));
+
+            let response = {};
+            response.Term = term;
+            response.Schedule = JSON.parse(removed);
+
+            resolve(response);
         });
 
         return stream;

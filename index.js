@@ -97,7 +97,11 @@ async function getTestSchedule(id)
 
             let testSchedule = [];
             testSchedule.push({FullName: student.FullName, ID: student.ID});
-            testSchedule.push(await testSchedule_viewer.getTestSchedules(student.ViewTestSchedule));
+
+            let response = await testSchedule_viewer.getTestSchedules(student.ViewTestSchedule);
+            testSchedule[0].Term = response.Term;
+            testSchedule.push(response.Schedule);
+
             return testSchedule;
         }
 
