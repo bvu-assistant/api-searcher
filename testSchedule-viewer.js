@@ -135,7 +135,7 @@ async function getTestScheduleHTML(url)
                         '__VIEWSTATE': process.env.VIEWSTATE,
                         'ctl00$DdListMenu': "-1",
                         'ctl00$ContentPlaceHolder$SearchType': "radSinhVien",
-                        'ctl00$ContentPlaceHolder$cboHocKy3': "30",
+                        'ctl00$ContentPlaceHolder$cboHocKy3': process.env.TERM_INDEX,
                         'ctl00$ContentPlaceHolder$TestType': "radAllTest",
                         'ctl00$ContentPlaceHolder$btnSearch': "Xem+lịch+thi"
                     }
