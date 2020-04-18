@@ -93,7 +93,11 @@ async function getTestSchedule(id)
         {
             student = JSON.parse(student);
             const testSchedule_viewer = require('./testSchedule-viewer');
-            return await testSchedule_viewer.getTestSchedules(student.ViewTestSchedule);
+            let testSchedule = await await testSchedule_viewer.getTestSchedules(student.ViewTestSchedule);
+
+            testSchedule.FullName = student.FullName;
+            testSchedule.ID = student.ID;
+            return testSchedule;
         }
 
         return {};
