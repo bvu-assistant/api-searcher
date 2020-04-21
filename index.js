@@ -75,7 +75,15 @@ async function getMarks(id)
         {
             student = JSON.parse(student);
             const mask_viewer = require('./mark_viewer');
-            return await mask_viewer.getMarks(student.ViewMarks);
+
+            let response = await mask_viewer.getMarks(student.ViewMarks);
+            if (Object.keys(response).length > 0)
+            {
+                response.SummaryTable.ID = student.ID;
+                response.SummaryTable.FullName = student.FullName;
+            }
+
+            return response;
         }
 
         return {};
