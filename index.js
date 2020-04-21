@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 
+let botstar_routes = require('./routes/botstar/botstar');
+app.use('/botstar', botstar_routes);
+
 
 
 //  Mở cổng
@@ -84,6 +87,7 @@ async function getMarks(id)
     }
 }
 
+
 async function getTestSchedule(id)
 {
     try
@@ -123,7 +127,17 @@ async function getLiability(id)
         {
             student = JSON.parse(student);
             const liability_viewer = require('./liability-viewer');
-            return await liability_viewer.getLiability(student.ViewLiabilities);
+
+
+            let liability = [];
+            liability.push({FullName: student.FullName, ID: student.ID});
+
+            let response = await liability_viewer.getLiability(student.ViewLiabilities);
+            liability[0].Term = response.Term;
+            liability.push(response.Liability);
+
+
+            return liability;
         }
 
         return {};

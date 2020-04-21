@@ -1,7 +1,7 @@
 
 module.exports = 
 {
-    getTestSchedules
+    renderMessage, getTestSchedules
 }
 
 
@@ -109,7 +109,6 @@ async function getTestSchedules(url)
 }
 
 
-
 async function getTestScheduleHTML(url)
 {
     try
@@ -121,7 +120,7 @@ async function getTestScheduleHTML(url)
         }
 
 
-        console.log('Getting test schedules - url: ' + url);
+        console.log('\n\nGetting test schedules - url: ' + url);
         let stream = await new Promise((resolve, reject) =>
         {
             request
@@ -160,6 +159,65 @@ async function getTestScheduleHTML(url)
     catch (err)
     {
         console.log(`[testSchedule-viewer.js] — Error:`, err);
+    }
+}
+
+
+async function renderMessage(fullname, url)
+{
+    try
+    {
+        let scheduleObject = await getTestSchedules(url);
+        console.log('Successfully get schedule.');
+        console.log('Rendering message fot BotStar ...');
+
+
+        // console.log(scheduleObject);
+        let term = scheduleObject.Term;
+        let schedules = scheduleObject.Schedule;
+
+
+        let stream = await new Promise((resolve, reject) =>
+        {
+            let textCollection = [];
+            textCollection.push({text: `${fullname} — ${term}`});
+
+
+            for (let i = 0; i < schedules.length; ++i)
+            {
+                let currSchedule  = '';
+                currSchedule += `- Lớp học phần: ${schedules[i].Class}.\n`;
+                currSchedule += `- Môn: ${schedules[i].Subject}.\n`;
+                currSchedule += `- Nhóm: ${schedules[i].Group || "Không"}.\n`;
+                currSchedule += `- Từ sĩ số: ${schedules[i].FromOrdinal || "Không"}.\n`;
+                currSchedule += `- Ngày: ${schedules[i].Date}.\n`;
+                currSchedule += `- Ca: ${schedules[i].Period}.\n`;
+                currSchedule += `- Phòng: ${schedules[i].Room || "Không"}.\n`;
+                currSchedule += `- Loại thi: ${schedules[i].TestType || "Không"}.\n`;
+                currSchedule += `- Ghi chú: ${schedules[i].Notes || "Không"}.\n`;
+
+                textCollection.push(
+                {
+                    text: currSchedule
+                });
+            }
+
+
+            //  For BotStar
+            let renderedMessage = {
+                "messages": textCollection
+            }
+            
+
+            // console.log(textTemplates);
+            return resolve(renderedMessage);
+        });
+
+        return stream;
+    }
+    catch (err)
+    {
+        console.log(err);
     }
 }
 
