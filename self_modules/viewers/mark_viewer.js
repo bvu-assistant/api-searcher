@@ -27,7 +27,7 @@ async function getMarks(url)
                 {
                     if (err)
                     {
-                        reject(err);
+                        return reject(err);
                     }
                     else
                     {
@@ -35,21 +35,48 @@ async function getMarks(url)
                         let tables = {};
 
 
+
+                        let isReTest = $('.tblKetQuaHocTap').length === 3;
                         $('.tblKetQuaHocTap').each(function(index, elem)
                         {
-                            if (index === 0)
+                            if (isReTest)
                             {
-                                tables.ActualTable = getActualTable(elem);
+                                switch(index) {
+                                    case 0: {
+                                        tables.ReTestTable = getReTestTable(elem);
+                                        break;
+                                    }
+
+                                    case 1: {
+                                        tables.ActualTable = getActualTable(elem);
+                                        break;
+                                    }
+
+                                    case 2: {
+                                        tables.SummaryTable = getSummaryTable(elem);
+                                        break;
+                                    }
+                                }
                             }
                             else
-                                if (index === 1)
-                                {
-                                    tables.SummaryTable = getSummaryTable(elem);
+                            {
+                                switch(index) {
+                                    case 0: {
+                                        tables.ActualTable = getActualTable(elem);
+                                        break;
+                                    }
+
+                                    case 1: {
+                                        tables.SummaryTable = getSummaryTable(elem);
+                                        break;
+                                    }
                                 }
+                            }
+                            
                         });
 
 
-                        resolve(tables);
+                        return resolve(tables);
                     }
                 }
             );
@@ -78,6 +105,9 @@ function getActualTable(table)
 
         $(table).find('>tbody >tr').each(function(index, elem)
         {
+            // console.log($(elem).html());
+            
+
             //  Là học kì mới
             if ($(this).hasClass('quater') === true)
             {
@@ -96,6 +126,8 @@ function getActualTable(table)
         });
         
 
+        console.log(elems);
+        
         return elems;
     }
     catch (err)
@@ -217,5 +249,57 @@ function getSummaryTable(table)
     catch (err)
     {
         console.log(err);
+    }
+}
+
+
+function getReTestTable(table)
+{
+    try
+    {
+        let $ = cheerio.load(table, {decodeEntities: false});
+        let elems = [];
+
+
+        $(table).find('>tbody >tr').each((index, elem) => {
+            if (index > 0) {
+
+                let retestSubject = {};
+                $(elem).find('>td').each((index, td) => {
+                    switch (index) {
+                        case 1: {
+                            retestSubject.classId = $(td).text();
+                            break;
+                        }
+                        
+                        case 2: {
+                            
+                            retestSubject.subject = $(td).text();
+                            break;
+                        }
+                        case 3: {
+
+                            retestSubject.state = $(td).text().trimLeft();
+                            break;
+                        }
+                        
+                        case 4: {
+                            
+                            retestSubject.testSchedules = $(td).text().trimLeft();
+                            break;
+                        }
+                    }
+                });
+
+                elems.push(retestSubject);
+            }
+        });
+
+        return elems;
+    }
+    catch (err)
+    {
+        console.log(err);
+        
     }
 }
