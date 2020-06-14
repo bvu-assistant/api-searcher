@@ -53,6 +53,10 @@ class Student {
                 case '3': {
                     return this.getWeeklyLearningSchedule();
                 }
+
+                default: {
+                    return 'Wrong method.'
+                }
             }
         }
         catch (err)
@@ -75,7 +79,7 @@ class Student {
                 response.InFo = {};
                 response.InFo.ID = this.info.ID;
                 response.InFo.FullName = this.info.FullName;
-                
+
             }
 
             return response;
