@@ -42,7 +42,7 @@ async function getMD5_Reversed(md5)
                         }
                         else
                         {
-                            reject('[md5-reverse.js:44] — Can\'t decode the MD5. ', body);
+                            reject('[md5-reverse.js:45] — Can\'t decode the MD5. ', body);
                         }
                     }
                 }
@@ -55,7 +55,7 @@ async function getMD5_Reversed(md5)
     }
     catch (err)
     {
-        console.log(`[md5-reverse.js:29] — Error:`, err);
+        console.log(`[md5-reverse.js:58] — Error:`, err);
     }
 }
 

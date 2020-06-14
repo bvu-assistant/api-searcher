@@ -30,46 +30,11 @@ router.get('/', async (req, res) =>
         catch (err)
         {
             console.log(err);
-            res.status(404).send('Unknow error.');
+            res.status(404).send('Unknown error.');
         }
     }
     else
     {
-        res.status(200).send("Seacher server chạy ngon lành.");
+        res.status(200).send("Searcher server chạy ngon lành.");
     }
-});
-
-
-
-router.get('/news', async (req, res) => {
-    const newsType = req.query.type;
-
-
-    if (newsType) {
-        if (newsType === 'main' || newsType === 'student') {
-
-            const newsHandler = require('../self_modules/news-handler');
-            let response;
-
-
-            switch(newsType) {
-                case 'main': {
-                    response = await newsHandler.scrapHeadlines();
-                    res.status(200).send(response);
-                    break;
-                }
-
-                case 'student': {
-                    response = await newsHandler.scrapStudentNews();
-                    res.status(200).send(response);
-                    break;
-                }
-            }
-
-            
-            return;
-        }    
-    }
-
-    res.status(404).send('Wrong param.');
 });
