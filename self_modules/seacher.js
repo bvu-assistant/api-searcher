@@ -14,6 +14,7 @@ const confirm_img = require('./confirm-image');
 
 async function getSearchingPage(studentID)
 {
+    console.log('\n\nNew session required: ', + studentID);
     try
     {
         //  Lấy object ảnh xác minh đăng nhập (returns: MD5, SessionId, ImageLink)

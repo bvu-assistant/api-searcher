@@ -33,8 +33,41 @@ router.get('/', async (req, res) =>
             res.status(404).send('Unknown error.');
         }
     }
-    else
-    {
-        res.status(200).send("Searcher server chạy ngon lành.");
+    else {
+        res.status(200).send('Server running ok.');
+    }
+        
+
+});
+
+
+
+router.get('/search/:id', async function(req, res) {
+    let idParam = req.params.id;
+
+
+    if (idParam) {
+        try
+        {
+            //  Get the student searching pages via the id
+            let student = await new Student(idParam);
+
+
+            if (student !== undefined) {
+                res.status(200).send(student);
+                return;
+            }
+
+
+            res.status(404).send('Student not found.');
+        }
+        catch (err)
+        {
+            console.log(err);
+            res.status(404).send('Unknown error.');
+        }
+    }
+    else {
+        res.status(200).send('Server running ok.');
     }
 });

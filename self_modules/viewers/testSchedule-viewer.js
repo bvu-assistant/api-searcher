@@ -131,7 +131,7 @@ async function getTestScheduleHTML(url)
                     url: url,
                     form:
                     {
-                        '__VIEWSTATE': process.env.VIEWSTATE,
+                        '__VIEWSTATE': process.env.__VIEWSTATE,
                         'ctl00$DdListMenu': "-1",
                         'ctl00$ContentPlaceHolder$SearchType': "radSinhVien",
                         'ctl00$ContentPlaceHolder$cboHocKy3': process.env.TERM_INDEX,
@@ -148,6 +148,7 @@ async function getTestScheduleHTML(url)
                     }
                     else
                     {
+                        console.log(body);
                         resolve(body);
                     }
                 }
