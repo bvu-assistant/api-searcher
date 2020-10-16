@@ -138,7 +138,8 @@ class Student {
 
             let response = await thisweekSchedule_viewer.getThisWeekSchedules(this.pages.ViewLearningSchedules);
             thisweekSchedules[0].Term = response.Term;
-            thisweekSchedules[1] = response.Schedule;
+            thisweekSchedules[1] = response.schedule;
+            
 
             return thisweekSchedules;
         }

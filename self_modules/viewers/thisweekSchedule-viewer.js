@@ -59,7 +59,7 @@ async function getThisWeekSchedules(url)
             });
 
 
-            resolve({Schedule: schedules});
+            resolve({schedule: schedules, term: term});
         });
 
         return stream;
