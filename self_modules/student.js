@@ -3,7 +3,7 @@ const searcher = require('./seacher');
 const mask_viewer = require('./viewers/mark_viewer');
 const liability_viewer = require('./viewers/liability-viewer');
 const testSchedule_viewer = require('./viewers/testSchedule-viewer');
-
+const thisweekSchedule_viewer = require('./viewers/thisweekSchedule-viewer');
 
 
 class Student {
@@ -131,7 +131,22 @@ class Student {
     }
 
     async getWeeklyLearningSchedule() {
-        
+        try
+        {
+            let thisweekSchedules = [];
+            thisweekSchedules.push({FullName: this.info.FullName, ID: this.info.ID});
+
+            let response = await thisweekSchedule_viewer.getThisWeekSchedules(this.pages.ViewLearningSchedules);
+            thisweekSchedules[0].Term = response.Term;
+            thisweekSchedules[1] = response.Schedule;
+
+            return thisweekSchedules;
+        }
+        catch (err)
+        {
+            console.log(err);
+            return err;
+        }
     }
 
 }

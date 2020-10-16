@@ -144,12 +144,12 @@ async function getTestScheduleHTML(url)
                     if (err || (res.statusCode !== 200))
                     {
                         console.log(`[testSchedule-viewer.js:93] — Error:`, err);
-                        reject(err);
+                        return reject(err);
                     }
                     else
                     {
-                        console.log(body);
-                        resolve(body);
+                        // console.log(body);
+                        return resolve(body);
                     }
                 }
             );
