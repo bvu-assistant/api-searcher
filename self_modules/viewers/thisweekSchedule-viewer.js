@@ -78,13 +78,20 @@ async function getSchedulesInSectionOfDate(tr) {
 
         $('table.table-lich_hoc > tbody > tr').each(function(index, elem) {
             let subject_name = $(elem).find('td:nth-child(2)').text().trim().replace(/\n */gm, '');
+
             let trimmed_subject_name = subject_name.replace('(Môn học đã kết thúc)', '');
+
+
+            let lastOpeningParenthesesIndex = trimmed_subject_name.lastIndexOf('(');
+            let lastEndingParenthesesIndex = trimmed_subject_name.lastIndexOf(')');
+            let type = trimmed_subject_name.substring(lastOpeningParenthesesIndex,
+                lastEndingParenthesesIndex + 1);
 
             classes.push({
                 class_id: $(elem).find('td:first-child').text().trim(),
-                type: trimmed_subject_name.split('(')[1].split(')')[0].split(':')[0],
+                type: type.replace('(', '').replace(')', '').split(':')[0],
                 completed: subject_name.includes('(Môn học đã kết thúc)')? true: false,
-                subject_name: trimmed_subject_name.split('(')[0],
+                subject_name: trimmed_subject_name.replace(type, ''),
                 period: $(elem).find('td:nth-child(3)').text().trim(),
                 teacher: $(elem).find('td:nth-child(4)').text().trim(),
                 room: $(elem).find('td:nth-child(5)').text().trim(),
