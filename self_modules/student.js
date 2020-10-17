@@ -71,15 +71,13 @@ class Student {
         try
         {
             console.log('Getting marks...');
-            let response = await mask_viewer.getMarks(this.pages.ViewMarks);
+            let response = {
+                details: await mask_viewer.getMarks(this.pages.viewMarks)
+            };
 
-
-            if (Object.keys(response).length > 0)
+            if (Object.keys(response.details).length > 0)
             {
-                response.InFo = {};
-                response.InFo.ID = this.info.ID;
-                response.InFo.FullName = this.info.FullName;
-
+                response.info = this.info;
             }
 
             return response;
@@ -95,12 +93,13 @@ class Student {
     {
         try
         {
-            let testSchedule = [];
-            testSchedule.push({FullName: this.info.FullName, ID: this.info.ID});
+            let testSchedule = {
+                info: this.info
+            };
 
-            let response = await testSchedule_viewer.getTestSchedules(this.pages.ViewTestSchedules);
-            testSchedule[0].Term = response.Term;
-            testSchedule.push(response.Schedule);
+            let response = await testSchedule_viewer.getTestSchedules(this.pages.viewTestSchedules);
+            testSchedule.info['term'] = response.Term;
+            testSchedule['details'] = response.Schedule;
 
             return testSchedule;
         }
@@ -115,12 +114,14 @@ class Student {
     {
         try
         {
-            let liability = [];
-            liability.push({FullName: this.info.FullName, ID: this.info.ID});
+            let liability = {
+                info: this.info
+            };
 
-            let response = await liability_viewer.getLiability(this.pages.ViewLiabilities);
-            liability[0].Term = response.Term;
-            liability.push(response.Liability);
+            let response = await liability_viewer.getLiability(this.pages.viewLiabilities);
+            liability.info.term = response.Term;
+            liability['details'] = response.Liability;
+
             return liability;
         }
         catch (err)
@@ -133,13 +134,13 @@ class Student {
     async getWeeklyLearningSchedule() {
         try
         {
-            let thisweekSchedules = [];
-            thisweekSchedules.push({FullName: this.info.FullName, ID: this.info.ID});
+            let thisweekSchedules = {
+                info: this.info
+            };
 
-            let response = await thisweekSchedule_viewer.getThisWeekSchedules(this.pages.ViewLearningSchedules);
-            thisweekSchedules[0].Term = response.Term;
-            thisweekSchedules[1] = response.schedule;
-            
+            let response = await thisweekSchedule_viewer.getThisWeekSchedules(this.pages.viewLearningSchedules);
+            thisweekSchedules.info.term = response.term;
+            thisweekSchedules['details'] = response.schedule;
 
             return thisweekSchedules;
         }

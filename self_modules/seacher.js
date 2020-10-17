@@ -89,13 +89,13 @@ async function getSearchingPage(studentID)
                             {
                                 case 1:
                                     {
-                                        info.ID = content;
+                                        info.id = content;
                                         break;
                                     }
     
                                 case 2:
                                     {
-                                        info.FullName = content;
+                                        info.fullName = content;
                                         break;
                                     }
     
@@ -105,22 +105,22 @@ async function getSearchingPage(studentID)
                                         if (content.indexOf('XemDiem') != -1)
                                         {
                                             let viewmark = content.split(' ')[2].split('>')[0].split('\"')[1];;
-                                            pages.ViewMarks = `https://sinhvien.bvu.edu.vn/${viewmark}`;
+                                            pages.viewMarks = `https://sinhvien.bvu.edu.vn/${viewmark}`;
                                         }
                                         else if (content.indexOf('XemLichHoc') != -1)
                                         {
                                             let learningSchedule = content.split(' ')[2].split('>')[0].split('\"')[1];;
-                                            pages.ViewLearningSchedules = `https://sinhvien.bvu.edu.vn/${learningSchedule}`;
+                                            pages.viewLearningSchedules = `https://sinhvien.bvu.edu.vn/${learningSchedule}`;
                                         }
                                         else if (content.indexOf('XemLichThi') != -1)
                                         {
                                             let testSchedule = content.split(' ')[2].split('>')[0].split('\"')[1];;
-                                            pages.ViewTestSchedules = `https://sinhvien.bvu.edu.vn/${testSchedule}`;
+                                            pages.viewTestSchedules = `https://sinhvien.bvu.edu.vn/${testSchedule}`;
                                         }
                                         else if (content.indexOf('CongNoSinhVien') != -1)
                                         {
                                             let liabilities = content.split(' ')[2].split('>')[0].split('\"')[1];;
-                                            pages.ViewLiabilities = `https://sinhvien.bvu.edu.vn/${liabilities}`;
+                                            pages.viewLiabilities = `https://sinhvien.bvu.edu.vn/${liabilities}`;
                                         }
                                     }
                             }
@@ -130,9 +130,7 @@ async function getSearchingPage(studentID)
     
                         if (Object.keys(pages).length > 0)
                         {
-                            info.SessionId = img.SessionId;
-                            info.SecurityMD5 = img.MD5;
-                            info.SecurityCode = md5Encoded;
+                            info.sessionId = img.SessionId;
                             return resolve(elems);
                         }
                         else
