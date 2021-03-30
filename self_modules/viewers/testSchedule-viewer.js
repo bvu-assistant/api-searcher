@@ -109,58 +109,50 @@ async function getTestSchedules(url)
 }
 
 
-async function getTestScheduleHTML(url)
+function getTestScheduleHTML(url)
 {
-    try
+    console.log('\n\nGetting test schedules - url: ' + url);
+    return new Promise((resolve, reject) =>
     {
         if (url === undefined)
         {
             console.log('URL is undefined.');
-            return {};
+            return resolve({});
         }
+    
+    
+        getLastestTermIndex(url)
+            .then(value => {
 
-
-        console.log('\n\nGetting test schedules - url: ' + url);
-        let stream = await new Promise((resolve, reject) =>
-        {
-            request
-            (
-                {
+                request ({
                     method: 'POST',
                     strictSSL: false,
                     url: url,
-                    form:
-                    {
-                        '__VIEWSTATE': process.env.__VIEWSTATE,
+                    form: {
+                        '__VIEWSTATE': value.viewState,
                         'ctl00$DdListMenu': "-1",
                         'ctl00$ContentPlaceHolder$SearchType': "radSinhVien",
-                        'ctl00$ContentPlaceHolder$cboHocKy3': process.env.TERM_INDEX,
+                        'ctl00$ContentPlaceHolder$cboHocKy3': value.termIndex,
                         'ctl00$ContentPlaceHolder$TestType': "radAllTest",
                         'ctl00$ContentPlaceHolder$btnSearch': "Xem+lịch+thi"
                     }
                 },
-                (err, res, body) =>
-                {
-                    if (err || (res.statusCode !== 200))
-                    {
-                        console.log(`[testSchedule-viewer.js:93] — Error:`, err);
-                        return reject(err);
+                    (err, res, body) => {
+                        if (err || (res.statusCode !== 200)) {
+                            console.log(`[testSchedule-viewer.js:93] — Error:`, err);
+                            return reject(err);
+                        }
+                        else {
+                            // console.log(body);
+                            return resolve(body);
+                        }
                     }
-                    else
-                    {
-                        // console.log(body);
-                        return resolve(body);
-                    }
-                }
-            );
-        });
-
-        return stream;
-    }
-    catch (err)
-    {
-        console.log(`[testSchedule-viewer.js] — Error:`, err);
-    }
+                );
+            })
+            .catch(err => {
+                return reject(err);
+            });
+    });
 }
 
 
@@ -222,6 +214,32 @@ async function renderMessage(fullname, url)
     }
 }
 
+
+function getLastestTermIndex(url) {
+    return new Promise((resolve, reject) => {
+
+        request({
+            method: 'GET',
+            strictSSL: false,
+            url,
+        },
+        (err, res, body) => {
+            if (err || res.statusCode !== 200) {
+                console.log(err);
+                return reject('error while getting test schedule... [method: GET]');
+            }
+
+            const $ = cheerio.load(body, {decodeEntities: false});
+            console.log($('#ctl00_ContentPlaceHolder_cboHocKy3 > option[selected="selected"]').html());
+
+
+            return resolve({
+                termIndex: $('#ctl00_ContentPlaceHolder_cboHocKy3 > option[selected="selected"]').attr('value'),
+                viewState: $('#__VIEWSTATE').val(),
+            });
+        });
+    });
+}
 
 
 // (async function ()
